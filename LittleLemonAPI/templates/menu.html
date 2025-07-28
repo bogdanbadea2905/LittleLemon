@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+<h1>Menu</h1>
+<div class="column" id="menu-container">
+  <p>Loading menu...</p>
+</div>
+
+<script>
+  fetch("/menu-items/")
+    .then((response) => response.json())
+    .then((data) => {
+      const container = document.getElementById("menu-container");
+      container.innerHTML = "";
+      data.results.forEach((item) => {
+        container.innerHTML += `
+        <p>
+          <a href="/menu/${item.id}/"> ${item.title} </a>
+          <span class="menu-price"> $${item.price} </span>
+        </p>
+      `;
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching menu:", error);
+      document.getElementById("menu-container").innerHTML =
+        "<p>Error loading menu.</p>";
+    });
+</script>
+{% endblock %}
